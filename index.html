@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -67,6 +67,27 @@
       background: #f7fbff;
     }
     .content { padding: 12px 15px; }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .summary-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fbfdff;
+    }
+    .summary-card h3 {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #1e3a5f;
+    }
+    .summary-card p {
+      margin: 7px 0 0;
+      color: #475569;
+      font-size: 0.88rem;
+    }
     table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
     th, td {
       padding: 9px 8px;
@@ -100,6 +121,7 @@
     ul { margin: 8px 0; padding-left: 18px; }
     .foot { color: var(--muted); font-size: 0.82rem; margin-top: 8px; }
     @media (max-width: 840px) { .meta { grid-template-columns: repeat(2, minmax(120px, 1fr)); } }
+    @media (max-width: 840px) { .summary-grid { grid-template-columns: 1fr; } }
     @media (max-width: 520px) { .meta { grid-template-columns: 1fr; } .hero h1 { font-size: 1.35rem; } }
   </style>
 </head>
@@ -113,6 +135,29 @@
         <div class="card"><div class="k">21V endpoint</div><div class="v">.dynamics.cn</div></div>
         <div class="card"><div class="k">Global API actions</div><div class="v">Available</div></div>
         <div class="card"><div class="k">21V Data CRUD</div><div class="v">Available</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Executive Summary</h2>
+      <div class="content">
+        <div class="summary-grid">
+          <div class="summary-card">
+            <h3>Overall Readiness</h3>
+            <p><span class="tag ok">Global: High</span> for API action orchestration and vendor-invoice workflow actions.</p>
+            <p><span class="tag warn">21V: Medium</span> because Data functions are stable, while API and Form channels have runtime errors in this session.</p>
+          </div>
+          <div class="summary-card">
+            <h3>Best Use Cases Right Now</h3>
+            <p>Use Global for API-driven agent workflows and automation via custom APIs.</p>
+            <p>Use 21V for entity-based CRUD, especially vendor and master data operations.</p>
+          </div>
+          <div class="summary-card">
+            <h3>Main Gap To Close</h3>
+            <p>Restore 21V API/Form runtime path. Current error:</p>
+            <div class="mono">code?.toLowerCase is not a function</div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -139,11 +184,11 @@ code?.toLowerCase is not a function</div></td>
     </section>
 
     <section class="section">
-      <h2>2) Function-by-Function Capability Matrix</h2>
+      <h2>2) Full Function Capability Matrix</h2>
       <div class="content">
         <table>
           <thead>
-            <tr><th>Function Domain</th><th>Global F&O (Observed)</th><th>21V F&O (Observed)</th><th>Result</th></tr>
+            <tr><th>Function Domain</th><th>Global F&O (Observed)</th><th>21V F&O (Observed)</th><th>Detailed Comparison</th></tr>
           </thead>
           <tbody>
             <tr>
@@ -154,27 +199,45 @@ code?.toLowerCase is not a function</div></td>
             </tr>
             <tr>
               <td>Form control and grid operations</td>
-              <td>Not sampled in this run</td>
+              <td><span class="tag warn">Not baseline sampled</span></td>
               <td><span class="tag bad">Error</span><div class="mono">form_find_controls / form_filter_form / form_click_control -> same runtime error</div></td>
               <td>21V form function channel currently unavailable in this session.</td>
             </tr>
             <tr>
               <td>Data entity discovery</td>
-              <td>Not sampled in this run</td>
+              <td><span class="tag warn">Not baseline sampled</span></td>
               <td><span class="tag ok">Works</span><div class="mono">data_find_entity_type("vendor") -> VendorsV2, VendorGroups, VendorsForAI</div></td>
               <td>21V metadata and entity discovery are healthy.</td>
             </tr>
             <tr>
               <td>Data query (vendor)</td>
-              <td>Not sampled in this run</td>
+              <td><span class="tag warn">Not baseline sampled</span></td>
               <td><span class="tag ok">Works</span><div class="mono">Vendor lookups succeeded in USMF.</div></td>
               <td>21V vendor query is executable with Data tools.</td>
             </tr>
             <tr>
               <td>Data create (vendor master)</td>
-              <td>Not sampled in this run</td>
+              <td><span class="tag warn">Not baseline sampled</span></td>
               <td><span class="tag ok">Works</span><div class="mono">Created vendor: CN-RAIL-001, Name: China Railway, Group: 20, Company: USMF</div></td>
               <td>21V supports transactional create via Data tools.</td>
+            </tr>
+            <tr>
+              <td>Vendor invoice functions</td>
+              <td><span class="tag ok">Works</span><div class="mono">Match status, match receipt, list unmatched, notify, submit workflow</div></td>
+              <td><span class="tag bad">Not callable in API path</span></td>
+              <td>Global has full sampled invoice action set. 21V API runtime issue blocks equivalent execution in current state.</td>
+            </tr>
+            <tr>
+              <td>Purchase order action functions</td>
+              <td><span class="tag ok">Works</span><div class="mono">PO lookup and staging updates available</div></td>
+              <td><span class="tag bad">Not callable in API path</span></td>
+              <td>Global currently exposes procurement-oriented APIs; 21V must recover API tool runtime first.</td>
+            </tr>
+            <tr>
+              <td>Inventory projection function</td>
+              <td><span class="tag ok">Works</span><div class="mono">PurchCopilotDMAGetInventoryProjectionCustomAPI</div></td>
+              <td><span class="tag bad">Not callable in API path</span></td>
+              <td>Function observed in Global only during this test run.</td>
             </tr>
           </tbody>
         </table>
@@ -182,7 +245,26 @@ code?.toLowerCase is not a function</div></td>
     </section>
 
     <section class="section">
-      <h2>3) Global API Function Inventory (Sample)</h2>
+      <h2>3) Functional Overview Scorecard</h2>
+      <div class="content">
+        <table>
+          <thead>
+            <tr><th>Capability Group</th><th>Global F&O</th><th>21V F&O</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Authentication and session start</td><td><span class="tag ok">Pass</span></td><td><span class="tag ok">Pass</span></td><td>21V requires China-cloud bridge and token flow.</td></tr>
+            <tr><td>API tools</td><td><span class="tag ok">Pass</span></td><td><span class="tag bad">Fail</span></td><td>21V runtime parser error in this session.</td></tr>
+            <tr><td>Form tools</td><td><span class="tag warn">Not tested here</span></td><td><span class="tag bad">Fail</span></td><td>21V form calls return same runtime error.</td></tr>
+            <tr><td>Data metadata tools</td><td><span class="tag warn">Not tested here</span></td><td><span class="tag ok">Pass</span></td><td>Entity discovery validated on vendor entities.</td></tr>
+            <tr><td>Data query tools</td><td><span class="tag warn">Not tested here</span></td><td><span class="tag ok">Pass</span></td><td>Vendor lookup in USMF successful.</td></tr>
+            <tr><td>Data create tools</td><td><span class="tag warn">Not tested here</span></td><td><span class="tag ok">Pass</span></td><td>Vendor creation in USMF validated.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>4) Global API Function Inventory (Sample)</h2>
       <div class="content">
         <table>
           <thead><tr><th>Area</th><th>Function</th><th>Action Menu Item</th></tr></thead>
@@ -201,15 +283,15 @@ code?.toLowerCase is not a function</div></td>
     </section>
 
     <section class="section">
-      <h2>4) Operational Guidance</h2>
+      <h2>5) Detailed Operational Guidance</h2>
       <div class="content">
         <ul>
-          <li>Use Global environment for API-action-driven scenarios that require custom APIs.</li>
-          <li>Use 21V environment for Data CRUD scenarios while API/Form runtime error remains unresolved.</li>
-          <li>Apply a unified regression pack across Vendor, Purchase, Inventory, Invoice, and Workflow domains for parity tracking.</li>
-          <li>For 21V, prioritize troubleshooting in MCP server runtime parser for Form/API channels.</li>
+          <li>Short term: route API-heavy workflows to Global and master-data CRUD to 21V.</li>
+          <li>For 21V stabilization: capture MCP server logs around API/Form tool invocation and validate server-side tool schema parsing.</li>
+          <li>Adopt one parity checklist per domain: Vendor, Purchase, Inventory, Invoice, Workflow, Project, and Sales.</li>
+          <li>When 21V API/Form is fixed, replay the same scripted tests and update this matrix as a release gate artifact.</li>
         </ul>
-        <div class="foot">Generated in English on 2026-04-09 from live MCP interactions in this workspace.</div>
+        <div class="foot">Generated in English on 2026-04-09 from live MCP interactions in this workspace. This report reflects observed runtime behavior at test time, not static product promises.</div>
       </div>
     </section>
   </div>
