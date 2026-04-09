@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>F&O MCP Functional Comparison: Global vs 21V</title>
+  <style>
+    :root {
+      --bg: #f3f7fb;
+      --panel: #ffffff;
+      --ink: #1f2937;
+      --muted: #5a6575;
+      --line: #d9e1ec;
+      --ok: #1f8f4e;
+      --warn: #b7791f;
+      --bad: #b91c1c;
+      --accent: #0f4c81;
+      --accent2: #0b6e7a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0%, rgba(15, 76, 129, 0.12), transparent 40%),
+        radial-gradient(circle at 96% 0%, rgba(11, 110, 122, 0.14), transparent 46%),
+        var(--bg);
+    }
+    .container { max-width: 1180px; margin: 26px auto 40px; padding: 0 16px; }
+    .hero {
+      background: linear-gradient(120deg, var(--accent), var(--accent2));
+      color: white;
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.14);
+    }
+    .hero h1 { margin: 0; font-size: 1.75rem; }
+    .hero p { margin: 8px 0 0; opacity: 0.95; }
+    .meta {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 10px;
+    }
+    .card {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+    .card .k { font-size: 0.78rem; opacity: 0.95; }
+    .card .v { font-size: 1rem; font-weight: 700; margin-top: 2px; }
+    .section {
+      margin-top: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    }
+    .section h2 {
+      margin: 0;
+      padding: 13px 15px;
+      font-size: 1.02rem;
+      border-bottom: 1px solid var(--line);
+      background: #f7fbff;
+    }
+    .content { padding: 12px 15px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th, td {
+      padding: 9px 8px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #f8fbff; color: #334155; }
+    .tag {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      border: 1px solid transparent;
+    }
+    .ok { color: var(--ok); background: #eaf8f0; border-color: #b8e6c8; }
+    .warn { color: var(--warn); background: #fff8eb; border-color: #f3ddb3; }
+    .bad { color: var(--bad); background: #fdeff0; border-color: #f4c8cc; }
+    .mono {
+      margin-top: 6px;
+      font-family: Consolas, "Courier New", monospace;
+      background: #f8fafc;
+      border: 1px solid #e3e8ef;
+      padding: 7px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    ul { margin: 8px 0; padding-left: 18px; }
+    .foot { color: var(--muted); font-size: 0.82rem; margin-top: 8px; }
+    @media (max-width: 840px) { .meta { grid-template-columns: repeat(2, minmax(120px, 1fr)); } }
+    @media (max-width: 520px) { .meta { grid-template-columns: 1fr; } .hero h1 { font-size: 1.35rem; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>Dynamics 365 F&O MCP Function Comparison</h1>
+      <p>Detailed comparison of functional capabilities between Global F&O and 21V F&O environments, based on live MCP calls.</p>
+      <div class="meta">
+        <div class="card"><div class="k">Global endpoint</div><div class="v">.dynamics.com</div></div>
+        <div class="card"><div class="k">21V endpoint</div><div class="v">.dynamics.cn</div></div>
+        <div class="card"><div class="k">Global API actions</div><div class="v">Available</div></div>
+        <div class="card"><div class="k">21V Data CRUD</div><div class="v">Available</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>1) Connectivity and Runtime Status</h2>
+      <div class="content">
+        <table>
+          <thead>
+            <tr><th>Dimension</th><th>Global F&O</th><th>21V F&O</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>MCP URL pattern</td><td>https://*.operations.dynamics.com/mcp</td><td>https://*.operations.dynamics.cn/mcp</td></tr>
+            <tr><td>Identity cloud</td><td>Global Entra ID</td><td>21V Entra ID (China cloud)</td></tr>
+            <tr><td>Auth method used in this workspace</td><td>Direct HTTP MCP</td><td>Stdio bridge with token proxy</td></tr>
+            <tr>
+              <td>Current observed runtime</td>
+              <td><span class="tag ok">Operational</span></td>
+              <td><span class="tag warn">Partially Operational</span><div class="mono">Data tools are working. API and Form tools currently return:
+code?.toLowerCase is not a function</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>2) Function-by-Function Capability Matrix</h2>
+      <div class="content">
+        <table>
+          <thead>
+            <tr><th>Function Domain</th><th>Global F&O (Observed)</th><th>21V F&O (Observed)</th><th>Result</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>API action discovery</td>
+              <td><span class="tag ok">Works</span><div class="mono">api_find_actions(vendor/purchase/invoice/inventory/workflow)</div></td>
+              <td><span class="tag bad">Error</span><div class="mono">api_find_actions -> code?.toLowerCase is not a function</div></td>
+              <td>Global supports API function orchestration. 21V API path currently unstable.</td>
+            </tr>
+            <tr>
+              <td>Form control and grid operations</td>
+              <td>Not sampled in this run</td>
+              <td><span class="tag bad">Error</span><div class="mono">form_find_controls / form_filter_form / form_click_control -> same runtime error</div></td>
+              <td>21V form function channel currently unavailable in this session.</td>
+            </tr>
+            <tr>
+              <td>Data entity discovery</td>
+              <td>Not sampled in this run</td>
+              <td><span class="tag ok">Works</span><div class="mono">data_find_entity_type("vendor") -> VendorsV2, VendorGroups, VendorsForAI</div></td>
+              <td>21V metadata and entity discovery are healthy.</td>
+            </tr>
+            <tr>
+              <td>Data query (vendor)</td>
+              <td>Not sampled in this run</td>
+              <td><span class="tag ok">Works</span><div class="mono">Vendor lookups succeeded in USMF.</div></td>
+              <td>21V vendor query is executable with Data tools.</td>
+            </tr>
+            <tr>
+              <td>Data create (vendor master)</td>
+              <td>Not sampled in this run</td>
+              <td><span class="tag ok">Works</span><div class="mono">Created vendor: CN-RAIL-001, Name: China Railway, Group: 20, Company: USMF</div></td>
+              <td>21V supports transactional create via Data tools.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>3) Global API Function Inventory (Sample)</h2>
+      <div class="content">
+        <table>
+          <thead><tr><th>Area</th><th>Function</th><th>Action Menu Item</th></tr></thead>
+          <tbody>
+            <tr><td>Vendor invoice</td><td>Check vendor invoice match status</td><td>VendInvoiceGetInvoiceMatchStatusCustomAPI</td></tr>
+            <tr><td>Vendor invoice</td><td>Match vendor invoice with product receipt</td><td>VendInvoiceMatchProductReceiptCustomAPI</td></tr>
+            <tr><td>Vendor invoice</td><td>Get unmatched vendor invoices</td><td>VendInvoiceGetUnmatchedInvoicesCustomAPI</td></tr>
+            <tr><td>Vendor invoice</td><td>Submit invoice to workflow</td><td>VendInvoiceSubmitToWorkflowCustomAPI</td></tr>
+            <tr><td>Vendor communication</td><td>Send mail to vendor</td><td>VendInvoiceSendMailToVendorCustomAPI</td></tr>
+            <tr><td>Purchasing</td><td>Find purchase order by candidate purchase order ID</td><td>PurchCopilotInboundFindPurchaseOrders</td></tr>
+            <tr><td>Purchasing</td><td>Stage purchase order updates</td><td>PurchCopilotInboundStagePurchaseOrderUpdatesCustomAPI</td></tr>
+            <tr><td>Inventory</td><td>Get inventory projection</td><td>PurchCopilotDMAGetInventoryProjectionCustomAPI</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>4) Operational Guidance</h2>
+      <div class="content">
+        <ul>
+          <li>Use Global environment for API-action-driven scenarios that require custom APIs.</li>
+          <li>Use 21V environment for Data CRUD scenarios while API/Form runtime error remains unresolved.</li>
+          <li>Apply a unified regression pack across Vendor, Purchase, Inventory, Invoice, and Workflow domains for parity tracking.</li>
+          <li>For 21V, prioritize troubleshooting in MCP server runtime parser for Form/API channels.</li>
+        </ul>
+        <div class="foot">Generated in English on 2026-04-09 from live MCP interactions in this workspace.</div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
