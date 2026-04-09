@@ -199,27 +199,27 @@ code?.toLowerCase is not a function</div></td>
             </tr>
             <tr>
               <td>Form control and grid operations</td>
-              <td><span class="tag warn">Not baseline sampled</span></td>
-              <td><span class="tag bad">Error</span><div class="mono">form_find_controls / form_filter_form / form_click_control -> same runtime error</div></td>
-              <td>21V form function channel currently unavailable in this session.</td>
+              <td><span class="tag bad">Fail</span><div class="mono">form_find_controls / form_click_control -> No form is available</div></td>
+              <td><span class="tag bad">Fail</span><div class="mono">form_find_controls / form_filter_form / form_click_control -> code?.toLowerCase is not a function</div></td>
+              <td>Both environments were tested. Global failed due missing active form context in current integration flow; 21V failed due runtime parser error.</td>
             </tr>
             <tr>
               <td>Data entity discovery</td>
-              <td><span class="tag warn">Not baseline sampled</span></td>
+              <td><span class="tag warn">Tested-Unavailable</span><div class="mono">Data tools are not exposed in current Global MCP tool mapping in this workspace.</div></td>
               <td><span class="tag ok">Works</span><div class="mono">data_find_entity_type("vendor") -> VendorsV2, VendorGroups, VendorsForAI</div></td>
-              <td>21V metadata and entity discovery are healthy.</td>
+              <td>21V metadata and entity discovery are healthy. Global data test path is unavailable via current tool surface.</td>
             </tr>
             <tr>
               <td>Data query (vendor)</td>
-              <td><span class="tag warn">Not baseline sampled</span></td>
+              <td><span class="tag warn">Tested-Unavailable</span><div class="mono">Global data query tools are not exposed in current MCP mapping.</div></td>
               <td><span class="tag ok">Works</span><div class="mono">Vendor lookups succeeded in USMF.</div></td>
-              <td>21V vendor query is executable with Data tools.</td>
+              <td>21V vendor query is executable with Data tools. Global query channel for Data tools is unavailable in current mapping.</td>
             </tr>
             <tr>
               <td>Data create (vendor master)</td>
-              <td><span class="tag warn">Not baseline sampled</span></td>
+              <td><span class="tag warn">Tested-Unavailable</span><div class="mono">Global data create tools are not exposed in current MCP mapping.</div></td>
               <td><span class="tag ok">Works</span><div class="mono">Created vendor: CN-RAIL-001, Name: China Railway, Group: 20, Company: USMF</div></td>
-              <td>21V supports transactional create via Data tools.</td>
+              <td>21V supports transactional create via Data tools. Global create path could not be invoked due tool-surface limitation.</td>
             </tr>
             <tr>
               <td>Vendor invoice functions</td>
@@ -254,10 +254,10 @@ code?.toLowerCase is not a function</div></td>
           <tbody>
             <tr><td>Authentication and session start</td><td><span class="tag ok">Pass</span></td><td><span class="tag ok">Pass</span></td><td>21V requires China-cloud bridge and token flow.</td></tr>
             <tr><td>API tools</td><td><span class="tag ok">Pass</span></td><td><span class="tag bad">Fail</span></td><td>21V runtime parser error in this session.</td></tr>
-            <tr><td>Form tools</td><td><span class="tag warn">Not tested here</span></td><td><span class="tag bad">Fail</span></td><td>21V form calls return same runtime error.</td></tr>
-            <tr><td>Data metadata tools</td><td><span class="tag warn">Not tested here</span></td><td><span class="tag ok">Pass</span></td><td>Entity discovery validated on vendor entities.</td></tr>
-            <tr><td>Data query tools</td><td><span class="tag warn">Not tested here</span></td><td><span class="tag ok">Pass</span></td><td>Vendor lookup in USMF successful.</td></tr>
-            <tr><td>Data create tools</td><td><span class="tag warn">Not tested here</span></td><td><span class="tag ok">Pass</span></td><td>Vendor creation in USMF validated.</td></tr>
+            <tr><td>Form tools</td><td><span class="tag bad">Fail</span></td><td><span class="tag bad">Fail</span></td><td>Global: no active form context available. 21V: runtime parser error.</td></tr>
+            <tr><td>Data metadata tools</td><td><span class="tag warn">Tested-Unavailable</span></td><td><span class="tag ok">Pass</span></td><td>Global data tools not exposed in current tool mapping; 21V entity discovery validated.</td></tr>
+            <tr><td>Data query tools</td><td><span class="tag warn">Tested-Unavailable</span></td><td><span class="tag ok">Pass</span></td><td>Global data query not exposed in current mapping; 21V vendor lookup succeeded.</td></tr>
+            <tr><td>Data create tools</td><td><span class="tag warn">Tested-Unavailable</span></td><td><span class="tag ok">Pass</span></td><td>Global data create not exposed in current mapping; 21V vendor creation validated.</td></tr>
           </tbody>
         </table>
       </div>
@@ -291,6 +291,10 @@ code?.toLowerCase is not a function</div></td>
           <li>Adopt one parity checklist per domain: Vendor, Purchase, Inventory, Invoice, Workflow, Project, and Sales.</li>
           <li>When 21V API/Form is fixed, replay the same scripted tests and update this matrix as a release gate artifact.</li>
         </ul>
+        <div class="mono">Full-test interpretation rule in this report:
+Pass = function executed successfully.
+Fail = function invocation executed and returned a runtime/business error.
+Tested-Unavailable = function group cannot be invoked because that tool category is not exposed in the current MCP integration mapping.</div>
         <div class="foot">Generated in English on 2026-04-09 from live MCP interactions in this workspace. This report reflects observed runtime behavior at test time, not static product promises.</div>
       </div>
     </section>
