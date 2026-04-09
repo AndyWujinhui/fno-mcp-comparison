@@ -264,7 +264,62 @@ code?.toLowerCase is not a function</div></td>
     </section>
 
     <section class="section">
-      <h2>4) Global API Function Inventory (Sample)</h2>
+      <h2>4) Domain-by-Domain Full Comparison</h2>
+      <div class="content">
+        <table>
+          <thead>
+            <tr><th>Business Domain</th><th>Global F&O</th><th>21V F&O</th><th>Comparison Verdict</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Vendor master</td>
+              <td><span class="tag ok">Pass (API scope)</span><div class="mono">Vendor invoice and communication actions available through API action discovery.</div></td>
+              <td><span class="tag ok">Pass (Data scope)</span><div class="mono">Entity discovery, vendor query, and vendor create in USMF validated.</div></td>
+              <td>Both environments support vendor operations, but via different channels (Global API-first, 21V Data-first).</td>
+            </tr>
+            <tr>
+              <td>Purchasing</td>
+              <td><span class="tag ok">Pass</span><div class="mono">Purchase order lookup and update-staging actions discovered.</div></td>
+              <td><span class="tag bad">Fail (API channel)</span><div class="mono">API action invocation path blocked by runtime parser error.</div></td>
+              <td>Global currently has stronger purchasing automation via MCP API actions.</td>
+            </tr>
+            <tr>
+              <td>Inventory</td>
+              <td><span class="tag ok">Pass</span><div class="mono">Inventory projection action discovered in API action set.</div></td>
+              <td><span class="tag warn">Partial</span><div class="mono">Data tools function; API/form channels currently unavailable.</div></td>
+              <td>Inventory API orchestration parity is not reached yet.</td>
+            </tr>
+            <tr>
+              <td>Invoice</td>
+              <td><span class="tag ok">Pass</span><div class="mono">Match, unmatched retrieval, notifications, and workflow submission actions discovered.</div></td>
+              <td><span class="tag bad">Fail (API channel)</span><div class="mono">API runtime parser issue prevents equivalent invoice actions through MCP API tools.</div></td>
+              <td>Invoice automation is currently stronger in Global MCP runtime.</td>
+            </tr>
+            <tr>
+              <td>Workflow operations</td>
+              <td><span class="tag ok">Pass</span><div class="mono">Invoice workflow submission action discovered and callable in Global API scope.</div></td>
+              <td><span class="tag bad">Fail (API channel)</span><div class="mono">Blocked by same API runtime error in this test session.</div></td>
+              <td>Workflow capability exists conceptually, but 21V API runtime must be fixed for parity.</td>
+            </tr>
+            <tr>
+              <td>Sales / Project / Customer domain checks</td>
+              <td><span class="tag warn">No positive action discovery in sampled API search</span><div class="mono">Search sampling did not return concrete action items for these keywords in this run.</div></td>
+              <td><span class="tag warn">Not verifiable via API/form channels in this run</span><div class="mono">API/form channels fail before domain-specific verification can proceed.</div></td>
+              <td>No confirmed parity claims made for these domains in this report.</td>
+            </tr>
+            <tr>
+              <td>Form interaction layer</td>
+              <td><span class="tag bad">Fail</span><div class="mono">Calls return: No form is available.</div></td>
+              <td><span class="tag bad">Fail</span><div class="mono">Calls return: code?.toLowerCase is not a function.</div></td>
+              <td>Both form channels failed, but for different root causes.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>5) Global API Function Inventory (Sample)</h2>
       <div class="content">
         <table>
           <thead><tr><th>Area</th><th>Function</th><th>Action Menu Item</th></tr></thead>
@@ -283,7 +338,7 @@ code?.toLowerCase is not a function</div></td>
     </section>
 
     <section class="section">
-      <h2>5) Detailed Operational Guidance</h2>
+      <h2>6) Detailed Operational Guidance</h2>
       <div class="content">
         <ul>
           <li>Short term: route API-heavy workflows to Global and master-data CRUD to 21V.</li>
@@ -295,7 +350,7 @@ code?.toLowerCase is not a function</div></td>
 Pass = function executed successfully.
 Fail = function invocation executed and returned a runtime/business error.
 Tested-Unavailable = function group cannot be invoked because that tool category is not exposed in the current MCP integration mapping.</div>
-        <div class="foot">Generated in English on 2026-04-09 from live MCP interactions in this workspace. This report reflects observed runtime behavior at test time, not static product promises.</div>
+        <div class="foot">Generated in English on 2026-04-09 from live MCP interactions in this workspace. This is a full comparison across all currently exposed and testable MCP function categories in this workspace configuration.</div>
       </div>
     </section>
   </div>
